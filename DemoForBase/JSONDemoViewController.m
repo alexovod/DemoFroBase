@@ -133,8 +133,6 @@
 
  }
 
-#define BATCH_SIZE 20
-
 - (void) importJSONFile
 {
     dispatch_async(self.queue, ^{
@@ -193,7 +191,6 @@
                     if (CFAbsoluteTimeGetCurrent() - startTime >= 0.5)
                     {
                         [self saveContext:importContext];
-                        [importContext reset];
 
                         startTime = CFAbsoluteTimeGetCurrent();
                     }
