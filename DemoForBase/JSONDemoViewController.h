@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface JSONDemoViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
+@interface JSONDemoViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UIScrollViewDelegate>
 
 @end

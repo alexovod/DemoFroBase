@@ -25,6 +25,9 @@
 @property (nonatomic, retain) dispatch_source_t source;
 @property (nonatomic) CGFloat progress;
 @property (nonatomic) CGFloat totalProgress;
+@property (nonatomic, assign) BOOL scrolling;
+@property (nonatomic, assign) BOOL decelerating;
+
 
 @property (assign) BOOL importing;
 
@@ -358,10 +361,36 @@
 
 
 #pragma mark Fetch delegate
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
+{
+    self.decelerating = YES;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    self.decelerating = NO;
+
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    self.scrolling = NO;
+
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView;
+{
+    self.scrolling = YES;
+}
+
 - (void) controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-        [self.tableView reloadData];
     
+    if (self.decelerating || self.scrolling)
+        return;
+    
+    [self.tableView reloadData];
 }
 
 @end
