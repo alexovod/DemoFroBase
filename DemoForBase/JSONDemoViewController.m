@@ -360,7 +360,7 @@
 }
 
 
-#pragma mark Fetch delegate
+#pragma mark Scroll View delegate
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
@@ -388,6 +388,8 @@
 {
     self.scrolling = YES;
 }
+
+#pragma mark FetchedResultsController
 
 - (void) controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
