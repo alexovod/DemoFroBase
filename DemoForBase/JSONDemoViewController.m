@@ -149,7 +149,7 @@
             self.totalProgress  = jsonArray.count;
             NSUInteger numberOfFetchedObjects = [[[self.fetchResultController sections] objectAtIndex:0] numberOfObjects];
 
-            self.numberOfObjets = numberOfFetchedObjects > 0 ? numberOfFetchedObjects : 0;
+            self.numberOfObjets = jsonArray.count;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
@@ -170,6 +170,8 @@
             int numberOfSavedUsers = 0;
             int numberOfIterations = 0;
             
+            CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+            
             for (NSDictionary *dict in jsonArray) {
                 @autoreleasepool {
                     
@@ -182,28 +184,32 @@
                     if ([self saveTags:tags name:name email:email age:age inManagedObjectContext: importContext])
                     {
                         ++numberOfSavedUsers;
-                        ++self.numberOfObjets;
                     }
                     
                     //update progress bar once per 100 iterations
                     if ((numberOfIterations % 100) == 0)
                         dispatch_source_merge_data(self.source, 100);
                     
+                    
                     #warning simulate longer data loading
                     usleep(10000);
 
-                    // Commit the change.
-                    if (BATCH_SIZE <= numberOfSavedUsers)
+                    // Commit the change per 0.5 secconds
+                    if (CFAbsoluteTimeGetCurrent() - startTime >= 0.5)
                     {
                         [self saveContext:importContext];
                         [importContext reset];
-                        
-                        
-                        
-                        
                         numberOfSavedUsers =  0;
-                        
+
+                        startTime = CFAbsoluteTimeGetCurrent();
                     }
+                    
+                    //save db every 500 iterations
+                    if ((numberOfIterations % 500) == 0)
+                    {
+                        [self saveParentContextMoreComming:YES];
+                    }
+                    
                     
                 }
             }
@@ -216,11 +222,34 @@
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.progressView.hidden = YES;
+                [self.progressView removeFromSuperview];
+                self.progressView = nil;
             });
 
         }
     });
+    
+}
+
+- (void) saveParentContextMoreComming:(BOOL)moreComming
+{
+    [self.context performBlock:^{
+        NSError *error;
+        if([self.context hasChanges] && ![self.context save:&error])
+        {
+            NSLog(@"failed to save data in db");
+            exit(-1);
+        }
+        
+        if (!moreComming)
+        {
+            [self.context reset];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self fetch];
+            });
+        }
+        
+    }];
     
 }
 
@@ -231,35 +260,20 @@
     {
         [aContext reset];
         
-        //save in db
-        [self.context performBlock:^{
-            NSError *error;
-            if(![self.context save:&error])
-            {
-                NSLog(@"failed to save data in db");
-                exit(-1);
-            }
-            
-        }];
-        
     }
 
 }
 
 //merging from import context
 - (void)contextChanged:(NSNotification*)notification {
+   
+    if (notification.object == self.context) return;
     
     [self.mainThreadContext performBlock:^{
         [self.mainThreadContext mergeChangesFromContextDidSaveNotification:notification];
         
         if (!self.importing)
-            [self.context performBlock:^{
-                //reset context and refetch data to reduce memory footprint
-                [self.context reset];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self fetch];
-                });
-            }];
+            [self saveParentContextMoreComming:NO];
 
 
     }];
@@ -317,8 +331,8 @@
     if (self.importing && numberOfFetchedObjects <= indexPath.row )
     {
         cell.nameLable.text = @"";
-        cell.ageLable.text = @"...";
-        cell.emailLable.text = @"";
+        cell.ageLable.text = @"";
+        cell.emailLable.text = @"Loading...";
         
     } else
     {
