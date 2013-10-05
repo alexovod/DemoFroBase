@@ -166,7 +166,6 @@
             
             
             
-            int numberOfSavedUsers = 0;
             int numberOfIterations = 0;
             
             CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
@@ -180,10 +179,7 @@
                     NSArray *tags = [dict objectForKey:@"tags"];
                     ++numberOfIterations;
                     
-                    if ([self saveTags:tags name:name email:email age:age inManagedObjectContext: importContext])
-                    {
-                        ++numberOfSavedUsers;
-                    }
+                    [self saveTags:tags name:name email:email age:age inManagedObjectContext: importContext];
                     
                     //update progress bar once per 100 iterations
                     if ((numberOfIterations % 100) == 0)
@@ -198,7 +194,6 @@
                     {
                         [self saveContext:importContext];
                         [importContext reset];
-                        numberOfSavedUsers =  0;
 
                         startTime = CFAbsoluteTimeGetCurrent();
                     }
@@ -214,11 +209,7 @@
             }
             
             self.importing = NO;
-            
-            if (numberOfSavedUsers > 0)
-            {
-                [self saveContext:importContext];
-            }
+            [self saveContext:importContext];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.progressView removeFromSuperview];
@@ -255,7 +246,7 @@
 - (void) saveContext:(NSManagedObjectContext *) aContext
 {
     NSError *error;
-    if([aContext save:&error])
+    if([aContext hasChanges] && [aContext save:&error])
     {
         [aContext reset];
         
