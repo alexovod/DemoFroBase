@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>AE99DB83-6CFB-494E-AEC9-454B34F857CC</string>
+	<key>IDESourceControlProjectName</key>
+	<string>DemoForBase</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>851E1AC7-7588-4204-835D-4CBF0A54B51B</key>
+		<string>https://github.com/alexovod/DemoFroBase.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>DemoForBase.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>851E1AC7-7588-4204-835D-4CBF0A54B51B</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/alexovod/DemoFroBase.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>851E1AC7-7588-4204-835D-4CBF0A54B51B</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>851E1AC7-7588-4204-835D-4CBF0A54B51B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>DemoFroBase</string>
+		</dict>
+	</array>
+</dict>
+</plist>
