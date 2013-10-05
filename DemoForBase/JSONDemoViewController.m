@@ -147,7 +147,6 @@
             NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
             
             self.totalProgress  = jsonArray.count;
-            NSUInteger numberOfFetchedObjects = [[[self.fetchResultController sections] objectAtIndex:0] numberOfObjects];
 
             self.numberOfObjets = jsonArray.count;
             
@@ -295,6 +294,7 @@
     [super viewWillAppear:animated];
     [self fetch];
     [self.tableView reloadData];
+    
     
 }
 
