@@ -71,7 +71,7 @@
     if (coordinator != nil) {
         _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         _managedObjectContext.persistentStoreCoordinator = coordinator;
-        _mainManagedObjectContext.undoManager = nil;
+        _managedObjectContext.undoManager = nil;
         
     }
     return _managedObjectContext;
