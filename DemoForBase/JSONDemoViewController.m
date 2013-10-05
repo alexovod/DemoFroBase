@@ -370,12 +370,17 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     self.decelerating = NO;
+    [self.tableView reloadData];
 
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     self.scrolling = NO;
+    
+    if (!decelerate)
+        [self.tableView reloadData];
+
 
 }
 
