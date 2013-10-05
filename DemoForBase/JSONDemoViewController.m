@@ -15,14 +15,14 @@
 
 @interface JSONDemoViewController ()
 
-@property (nonatomic, retain) UITableView *tableView;
-@property (nonatomic, retain) dispatch_queue_t queue;
-@property (retain) NSManagedObjectContext *context;
-@property (nonatomic, retain) NSManagedObjectContext *mainThreadContext;
-@property (nonatomic, retain) NSFetchedResultsController *fetchResultController;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) dispatch_queue_t queue;
+@property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic, strong) NSManagedObjectContext *mainThreadContext;
+@property (nonatomic, strong) NSFetchedResultsController *fetchResultController;
 
-@property (nonatomic, retain) UIProgressView *progressView;
-@property (nonatomic, retain) dispatch_source_t source;
+@property (nonatomic, strong) UIProgressView *progressView;
+@property (nonatomic, strong) dispatch_source_t source;
 @property (nonatomic) CGFloat progress;
 @property (nonatomic) CGFloat totalProgress;
 @property (nonatomic, assign) BOOL scrolling;
@@ -188,7 +188,7 @@
                     
                     
                     #warning simulate longer data loading
-                    usleep(10000);
+//                    usleep(10000);
 
                     // Commit the change per 0.5 secconds
                     if (CFAbsoluteTimeGetCurrent() - startTime >= 0.5)

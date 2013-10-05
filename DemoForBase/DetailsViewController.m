@@ -12,8 +12,8 @@
 
 @interface DetailsViewController ()
 
-@property (nonatomic, retain) UITableView *tableView;
-@property (nonatomic, retain) User *user;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) User *user;
 
 @end
 

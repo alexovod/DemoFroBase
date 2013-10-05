@@ -10,8 +10,8 @@
 
 @interface JSONDemoTableViewCell : UITableViewCell
 
-@property (nonatomic, retain) UILabel *nameLable;
-@property (nonatomic, retain) UILabel *ageLable;
-@property (nonatomic, retain) UILabel *emailLable;
+@property (nonatomic, strong) UILabel *nameLable;
+@property (nonatomic, strong) UILabel *ageLable;
+@property (nonatomic, strong) UILabel *emailLable;
 
 @end
