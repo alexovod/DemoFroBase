@@ -49,10 +49,4 @@
     // Configure the view for the selected state
 }
 
-- (CGFloat) height
-{
-    return self.nameLable.frame.size.height + self.ageLable.frame.size.height + self.emailLable.frame.size.height;
-}
-
-
 @end

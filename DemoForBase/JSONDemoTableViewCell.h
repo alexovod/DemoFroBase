@@ -14,6 +14,4 @@
 @property (nonatomic, retain) UILabel *ageLable;
 @property (nonatomic, retain) UILabel *emailLable;
 
-- (CGFloat) height;
-
 @end

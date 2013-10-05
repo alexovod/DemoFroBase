@@ -98,25 +98,24 @@
     });
     dispatch_resume(self.source);
 
-    self.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(10, 30, 100, 10)];
+    CGFloat w = [[UIScreen mainScreen] bounds].size.width;
+    self.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(0, 64, w, 4)];
+    [self.progressView bringSubviewToFront:self.view];
     
-    UIBarButtonItem* progressItem = [[UIBarButtonItem alloc] initWithCustomView:self.progressView];
-    
-     self.navigationItem.rightBarButtonItem = progressItem;
-    
+    [self.view addSubview:self.progressView];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    [self setupProgressView];
     
     self.context = [[DataBase sharedInstance] managedObjectContext];
     self.mainThreadContext = [[DataBase sharedInstance] mainManagedObjectContext];
     
     [self importJSONFile];
     [self setupTableView];
+    [self setupProgressView];
     
 }
 
@@ -269,12 +268,7 @@
 
 - (void) setupTableView
 {
-    CGRect frame = [[UIScreen mainScreen] bounds];
-    
-    CGFloat h = self.navigationController.navigationBar.frame.size.height + [[UIApplication sharedApplication] statusBarFrame].size.height;
-    frame.origin.y += h;
-    frame.size.height -= h;
-    
+
     self.tableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] bounds] style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
