@@ -23,6 +23,7 @@
 
 @property (nonatomic, strong) UIProgressView *progressView;
 @property (nonatomic, strong) dispatch_source_t source;
+@property (nonatomic, strong) dispatch_semaphore_t semaphore;
 @property (nonatomic) CGFloat progress;
 @property (nonatomic) CGFloat totalProgress;
 @property (nonatomic, assign) BOOL scrolling;
@@ -68,6 +69,7 @@
     if (self) {
         
         _queue = dispatch_queue_create("com.read.json.queue", DISPATCH_QUEUE_SERIAL);
+        _semaphore = dispatch_semaphore_create(1);
         self.title = @"Demo for Base";
         // Custom initialization
     }
@@ -119,7 +121,8 @@
     [self importJSONFile];
     [self setupTableView];
     [self setupProgressView];
-    
+    [self fetch];
+  
 }
 
 - (void)didReceiveMemoryWarning
@@ -223,6 +226,7 @@
 
 - (void) saveParentContextMoreComming:(BOOL)moreComming
 {
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
     [self.context performBlock:^{
         NSError *error;
         if([self.context hasChanges] && ![self.context save:&error])
@@ -230,6 +234,7 @@
             NSLog(@"failed to save data in db");
             exit(-1);
         }
+        dispatch_semaphore_signal(self.semaphore);
         
         if (!moreComming)
         {
@@ -258,10 +263,14 @@
 - (void)contextChanged:(NSNotification*)notification {
    
     if (notification.object == self.context) return;
-    
+
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+
     [self.mainThreadContext performBlock:^{
         [self.mainThreadContext mergeChangesFromContextDidSaveNotification:notification];
-        
+
+        dispatch_semaphore_signal(self.semaphore);
+
         if (!self.importing)
             [self saveParentContextMoreComming:NO];
 
@@ -283,8 +292,6 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self fetch];
-    [self.tableView reloadData];
     
     
 }
@@ -295,7 +302,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-        return self.numberOfObjets;
+    return [[self.fetchResultController sections][section] numberOfObjects];
+//        return self.numberOfObjets;
 
 }
 
