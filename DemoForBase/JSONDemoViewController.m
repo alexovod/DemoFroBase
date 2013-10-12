@@ -44,9 +44,7 @@
         return _fetchResultController;
     
     
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"User" inManagedObjectContext:self.mainThreadContext];
-    [request setEntity:entity];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
     
     NSSortDescriptor *sortByName = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
     [request setSortDescriptors:@[sortByName]];
@@ -107,7 +105,7 @@
     self.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(0, 64, w, 4)];
     [self.progressView bringSubviewToFront:self.view];
     
-    [self.view addSubview:self.progressView];
+    [self.navigationController.view addSubview:self.progressView];
 }
 
 - (void)viewDidLoad
